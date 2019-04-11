@@ -1,0 +1,27 @@
+compilationUnit -> statement
+statement -> ";" | VarDeclaration ";" | assignment | block | statementExpression | ifStatement | whileStatement | returnStatement ";"
+block -> "{" (statement)* "}"
+ifStatement -> "if" "(" expression ")" statement | "if" "(" expression ")" "else" statement
+WhileStatement -> "while" "(" expression ")" statement
+VarDeclaration -> theType ID
+theType -> "boolean" | "int"
+returnStatement -> "return" expression
+assignment -> primaryExpression "=" expression
+expression -> globalRandom | globalEnemy | assignment | conditionalOrExpression
+primaryExpression -> CUR | NUM | ID | "(" expression ")"
+globalRandom -> RANDOM "(" expression ")"
+globalEnemy -> ENEMY "[" expression "]"
+conditionalOrExpression -> conditionalOrExpression "||" conditionalandExpression |  conditionalandExpression
+conditionalandExpression -> conditionalandExpression "&&" inclusiveOrExpression | inclusiveOrExpression
+inclusiveOrExpression -> inclusiveOrExpression "|" exclusiveOrExpression | exclusiveOrExpression
+exclusiveOrExpression -> exclusiveOrExpression "^" andExpression | andExpression
+andExpression -> andExpression "&" equalityExpression | equalityExpression
+equalityExpression -> equalityExpression equalop relationalExpression | relationalExpression
+relationalExpression -> relationalExpression relop additiveExpression | additiveExpression
+equalop -> "==" | "!="
+additiveExpression -> additiveExpression addop multiplicativeExpression | multiplicativeExpression
+relop -> ">" | ">=" | "<" | "<="
+multiplicativeExpression -> multiplicativeExpression mulop unaryExpression | unaryExpression
+addop -> "+" | "-"
+unaryExpression -> "~" unaryExpression | "!" unaryExpression | primaryExpression
+mulop -> "*" | "/" | "%"
