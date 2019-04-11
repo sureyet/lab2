@@ -1,4 +1,8 @@
 # 开发日志
+开发语言：Java
+GUI工具包：Swing
+开发环境：IntelliJ IDEA 2018.2.5 x64
+
 
 ## todo-list
 
