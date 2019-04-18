@@ -8,6 +8,7 @@ public class ValueStack {
 	public int cur = 1;
 	public int[] enemy = new int[1000];
 	public int returnValue = -1;
+	public int sum = 0; //记录当前回合的总分
 
 	public HashMap<String, Integer> getIntStack() {
 		return intStack;
@@ -45,5 +46,8 @@ public class ValueStack {
 		System.out.println("Cur: "+String.valueOf(cur));
 		System.out.println("return value: "+String.valueOf(returnValue));
 		System.out.println();
+
+		sum += returnValue;
 	}
+
 }

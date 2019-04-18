@@ -1,0 +1,3 @@
+int i;
+i = RANDOM(9);
+return i;
