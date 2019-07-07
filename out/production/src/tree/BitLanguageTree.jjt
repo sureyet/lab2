@@ -1,0 +1,133 @@
+/**
+ * JavaCC file
+ */
+options{
+  JDK_VERSION = "1.5";
+  LOOKAHEAD = 1;
+  //LL(1)文法
+static  = false;
+//语法分析器是否为静态
+}
+PARSER_BEGIN(BitLanguageTree)
+package tree;
+import java.io.*;
+public class BitLanguageTree{
+  public static void main(String args[])throws ParseException, IOException{
+    BufferedReader bufferedReader = new BufferedReader(new FileReader(args[0]));
+    String string = bufferedReader.readLine();
+    String totalString = "";
+    while (string != null){
+      totalString+=string;
+      string = bufferedReader.readLine();
+    }
+    Reader reader = new StringReader(totalString);
+    BitLanguageTree bitlan = new BitLanguageTree(reader);
+    SimpleNode root__ = bitlan.analyse();
+    root__.dump(">",args[1]);
+    bufferedReader.close();
+  }
+}
+PARSER_END(BitLanguageTree)
+SKIP:{
+  " "
+  | "\r"
+  | "\t"
+  | "\n"
+}
+TOKEN:/* OPERATORS */
+{
+  <letter:["a"-"z", "A"-"Z"]>
+  | <digit:["0"-"9"]>
+}
+SimpleNode analyse():{}{
+  statement()(statement())*{
+    return jjtn000;
+  }
+  | ";"{
+    return jjtn000;
+  }
+}
+void statement():{}{
+  declaration()
+  | block()
+  | assignment()";"
+  | ifStatement()
+  | whileStatement()
+  | returnStatement()";"
+}
+void declaration():{}{
+  typeID()ID()";"
+}
+void typeID():{}{
+  "boolean"
+  | "int"
+}
+void ID():{}{
+  <letter>(<digit>
+  | <letter>)*
+}
+void block():{}{
+  "{"statementList()"}"
+}
+void statementList():{}{
+  (statement())*
+}
+void ifStatement():{}{
+  "if""("expression()")"statement()[LOOKAHEAD(1)"else"statement()]
+}
+void whileStatement():{}{
+  "while""("expression()")"statement()
+}
+void returnStatement():{}{
+  "return"expression()
+}
+void assignment():{}{
+  primaryExpression()"="expression()
+}
+void expression():{}{
+  globalRandom()
+  | globalEnemy()
+  | conditionalOrExpression()
+}
+void primaryExpression():{}{
+  //	"CUR" | NUM() | ID() | "(" expression() ")"
+  "CUR"
+  | ID()
+}
+
+void globalRandom():{}{
+  "RANDOM""("expression()")"
+}
+void globalEnemy():{}{
+  "ENEMY""["expression()"]"
+}
+void conditionalOrExpression():{}{
+  conditionalandExpression()(LOOKAHEAD(1)"||"conditionalOrExpression())*
+}
+void conditionalandExpression():{}{
+  equalityExpression()(LOOKAHEAD(1)"&&"conditionalandExpression())*
+}
+void equalityExpression():{}{
+  relationalExpression()(LOOKAHEAD(1)("=="
+  | "!=")equalityExpression())*
+}
+void relationalExpression():{}{
+  additiveExpression()(LOOKAHEAD(1)(">"
+  | ">="
+  | "<"
+  | "<=")relationalExpression())*
+}
+void additiveExpression():{}{
+  unaryExpression()(LOOKAHEAD(1)("+"
+  | "-")additiveExpression())*
+}
+void unaryExpression():{}{
+  primaryExpression()
+  | "("expression()")"
+  |NUM()
+}
+
+void NUM():{}{
+  <digit>(<digit>)*
+}
+
